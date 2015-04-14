@@ -17,7 +17,7 @@ ssh $SSH_ARGS $AMBARI_NODE "/usr/sbin/ambari-server setup --jdbc-db=$SQL_TYPE --
 
 echo -e "\n####  Running grants for Ranger on $SQL_NODE"
 scp $SSH_ARGS $SQL_GRANT_SCRIPT $SQL_NODE:/tmp/
-ssh $SSH_ARGS $SQL_NODE "mysql -uroot -h localhost </tmp/$(echo $SQL_GRANT_SCRIPT | awk -F\/ '{print $NF})"
+ssh $SSH_ARGS $SQL_NODE "mysql -uroot -h localhost </tmp/$(echo $SQL_GRANT_SCRIPT | awk -F\/ '{print $NF}')"
 
 echo -e "\n####  Restarting ambari-server and ambari-agent"
 ssh $SSH_ARGS $AMBARI_NODE "service ambari-server restart"
