@@ -15,6 +15,10 @@ done
 echo -e "\n####  Registering the JDBC driver with Ambari"
 ssh $SSH_ARGS $AMBARI_NODE "/usr/sbin/ambari-server setup --jdbc-db=$SQL_TYPE --jdbc-driver=$SQL_JDBC_DRIVER_PATH"
 
+echo -e "\n####  Install and start package $SQL_SERVER_PACKAGE_NAME on $SQL_NODE"
+ssh $SSH_ARGS $SQL_NODE "yum install $SQL_SERVER_PACKAGE_NAME -y"
+ssh $SSH_ARGS $SQL_NODE "service $SQL_SERVER_SERVICE_NAME start"
+
 echo -e "\n####  Running grants for Ranger on $SQL_NODE"
 scp $SSH_ARGS $SQL_GRANT_SCRIPT $SQL_NODE:/tmp/
 ssh $SSH_ARGS $SQL_NODE "mysql -uroot -h localhost </tmp/$(echo $SQL_GRANT_SCRIPT | awk -F\/ '{print $NF}')"
